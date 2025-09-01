@@ -24,13 +24,13 @@
     </Inf>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\driver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\dbg\detections.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\utils\utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\driver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,10 +38,10 @@
     <ClInclude Include="source\dbg\detections.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\include.h">
+    <ClInclude Include="source\utils\utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\utils\utils.h">
+    <ClInclude Include="source\include.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
