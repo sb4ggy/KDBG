@@ -18,6 +18,7 @@ These are the checks that are there at the moment, above each check I also put a
 - **Add a vm-check**
 - **Add a check for process names (not just .exe)**
 - **Add a dumb check where I check the process path and if there are any debugger dll names**
+- **And many other things...**
 
 ### Info
 Compile this project in x64 Release and of course with the WDK installed: https://learn.microsoft.com/en-us/windows-hardware/drivers/download-the-wdk
