@@ -30,9 +30,7 @@ bool kdbg::BeingDebugged()
 	UCHAR BeingDebugged{ };
 	SIZE_T BytesRead{ };
 
-	PPEB PebAddress = *reinterpret_cast<PPEB*>((PUCHAR)process + 0x550);
-
-	NTSTATUS status = MmCopyVirtualMemory(process, (PVOID)((PUCHAR)PebAddress + 0x2), PsGetCurrentProcess(), &BeingDebugged, sizeof(UCHAR), KernelMode, &BytesRead);
+	NTSTATUS status = MmCopyVirtualMemory(process, (PVOID)((PUCHAR)pebAddress + 0x2), PsGetCurrentProcess(), &BeingDebugged, sizeof(UCHAR), KernelMode, &BytesRead);
 	if (NT_SUCCESS(status) && BeingDebugged)
 		return true;
 
@@ -50,9 +48,7 @@ bool kdbg::NtGlobalFlag()
 	UCHAR NtGlobalFlag{ };
 	SIZE_T BytesRead{ };
 
-	PPEB PebAddress = *reinterpret_cast<PPEB*>((PUCHAR)process + 0x550);
-
-	NTSTATUS status = MmCopyVirtualMemory(process, (PVOID)((PUCHAR)PebAddress + 0xbc), PsGetCurrentProcess(), &NtGlobalFlag, sizeof(UCHAR), KernelMode, &BytesRead);
+	NTSTATUS status = MmCopyVirtualMemory(process, (PVOID)((PUCHAR)pebAddress + 0xbc), PsGetCurrentProcess(), &NtGlobalFlag, sizeof(UCHAR), KernelMode, &BytesRead);
 	if (NT_SUCCESS(status) && NtGlobalFlag && NT_GLOBAL_FLAG_DEBUGGED)
 		return true;
 

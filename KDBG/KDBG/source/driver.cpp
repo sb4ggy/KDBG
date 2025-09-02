@@ -8,14 +8,36 @@ void thread_check()
 
 	while (true) 
 	{
-
-		kdbg::processId = util::retrieve_pid(L"test_program.exe");
-		NTSTATUS status = PsLookupProcessByProcessId(kdbg::processId, &kdbg::process);
-		if (!NT_SUCCESS(status))
+		HANDLE processId = util::retrieve_pid(L"test_program.exe");
+		if (!processId)
 		{
-			kdbg_log("failed to find the target process!\n");
+			if (kdbg::process) {
+				ObDereferenceObject(kdbg::process);
+				kdbg::process = NULL;
+				kdbg::pebAddress = NULL;
+			}
+			kdbg::processId = NULL;
+
+			kdbg_log("failed to find the target process\n");
 			KeDelayExecutionThread(KernelMode, FALSE, &interval_long);
 			continue;
+		}
+
+		if (processId != kdbg::processId || !kdbg::process)
+		{
+			PEPROCESS tempProc{};
+			NTSTATUS status = PsLookupProcessByProcessId(processId, &tempProc);
+			if (!NT_SUCCESS(status))
+			{
+				KeDelayExecutionThread(KernelMode, FALSE, &interval_long);
+				continue;
+			}
+			if (kdbg::process)
+				ObDereferenceObject(kdbg::process);
+
+			kdbg::process = tempProc;
+			kdbg::processId = processId;
+			kdbg::pebAddress = *reinterpret_cast<PPEB*>((PUCHAR)kdbg::process + 0x550);
 		}
 
 		kdbg::ExeCheck();
@@ -40,6 +62,8 @@ void thread_check()
 
 		KeDelayExecutionThread(KernelMode, FALSE, &interval_short);
 	}
+
+	PsTerminateSystemThread(STATUS_SUCCESS);
 }
 
 NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath)
